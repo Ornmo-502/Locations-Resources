@@ -3,241 +3,867 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>أورنمو - منبع القانون</title>
+    <title>نظام توليد الصور بالصوت | Sound Visualization</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4A44C6;
+            --accent: #FF6584;
+            --dark: #2A2D43;
+            --light: #F7F9FC;
+            --success: #36D1DC;
+            --warning: #FFB347;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Tahoma', 'Geneva', 'Verdana', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            background: linear-gradient(135deg, #1a2a6c, #2a2d43, #0f3460);
+            color: var(--light);
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            color: #fff;
+            line-height: 1.6;
         }
         
         .container {
-            max-width: 900px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
             text-align: center;
-        }
-        
-        .header {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 30px 20px;
             margin-bottom: 30px;
-        }
-        
-        .logo {
-            width: 150px;
-            height: 150px;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-            border: 3px solid #ffc000;
-        }
-        
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         h1 {
-            margin-bottom: 10px;
-            font-size: 2.5rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
         
-        .subtitle {
-            margin-bottom: 10px;
+        .tagline {
             font-size: 1.2rem;
-            opacity: 0.9;
+            color: #B8B8D1;
+            max-width: 700px;
+            margin: 0 auto 20px;
         }
         
-        .buttons-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin: 30px 0;
-        }
-        
-        .btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            color: white;
+        .description {
             font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 120px;
-            text-decoration: none;
-        }
-        
-        .btn:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-            border-color: #ffc000;
-        }
-        
-        .btn i {
-            font-size: 30px;
-            margin-bottom: 10px;
-            color: #ffc000;
-        }
-        
-        .download-section {
-            margin: 30px 0;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #CDCDE8;
+            background: rgba(0, 0, 0, 0.2);
             padding: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
+            border-radius: 12px;
+            border-right: 4px solid var(--primary);
         }
         
-        .download-btn {
-            background: linear-gradient(135deg, #ffc000, #ff8c00);
-            border: none;
-            border-radius: 50px;
-            padding: 15px 40px;
-            color: #212121;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        @media (max-width: 1100px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .panel {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+        }
+        
+        .panel-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            display: flex;
             align-items: center;
             gap: 10px;
-            margin-top: 15px;
-            box-shadow: 0 5px 15px rgba(255, 140, 0, 0.4);
-            text-decoration: none;
+            color: var(--light);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 10px;
         }
         
-        .download-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 140, 0, 0.6);
+        .panel-title i {
+            color: var(--primary);
         }
         
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 20px;
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
         }
         
         @media (max-width: 768px) {
-            .container {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .buttons-grid {
+            .controls {
                 grid-template-columns: 1fr;
             }
+        }
+        
+        button {
+            padding: 14px 20px;
+            font-size: 1.1rem;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 600;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        button:disabled {
+            background: linear-gradient(135deg, #7c7c7c, #5a5a5a);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        button.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        button.secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .status {
+            font-size: 1.1rem;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            border-right: 4px solid var(--primary);
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .visualizers {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .visualizer-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .visualizer-title {
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.3);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        canvas {
+            display: block;
+            width: 100%;
+        }
+        
+        #audioCanvas {
+            height: 200px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        #imageCanvas {
+            height: 400px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-section {
+            margin-top: 40px;
+        }
+        
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .gallery-title {
+            font-size: 1.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .gallery-controls {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-item canvas {
+            width: 100%;
+            height: 200px;
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .gallery-info {
+            padding: 15px;
+            font-size: 0.95rem;
+            color: #CDCDE8;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .empty-gallery {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px 20px;
+            color: #B8B8D1;
+            font-size: 1.1rem;
+        }
+        
+        .empty-gallery i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .instructions {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 15px;
+            border-right: 4px solid var(--accent);
+        }
+        
+        .instructions h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--accent);
+        }
+        
+        .instructions ol {
+            padding-right: 20px;
+            color: #CDCDE8;
+        }
+        
+        .instructions li {
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #B8B8D1;
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .mic-permission {
+            background: rgba(255, 101, 132, 0.1);
+            border: 1px solid rgba(255, 101, 132, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .mic-permission i {
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+        
+        .volume-indicator {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .volume-level {
+            height: 100%;
+            background: var(--gradient);
+            width: 0%;
+            transition: width 0.2s ease;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <div class="logo">
-                <img src="https://i.postimg.cc/C5ntjHwd/IMG-20250806-WA0010.jpg" alt="شعار أورنمو">
+        <header>
+            <h1><i class="fas fa-wave-square"></i> نظام توليد الصور بالصوت</h1>
+            <p class="tagline">تحويل الأصوات إلى لوحات فنية رقمية فريدة</p>
+            <div class="description">
+                يستمع هذا النظام إلى الصوت من الميكروفون ويحلل الترددات الصوتية لتوليد صور فنية ديناميكية تعكس خصائص الصوت المسموع. جرب التحدث أو تشغيل الموسيقى لترى كيف تتحول الأصوات إلى فن!
             </div>
-            <h1>أورنمو</h1>
-            <p class="subtitle">منبع القانون</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-sliders-h"></i> عناصر التحكم</h2>
+                
+                <div class="mic-permission">
+                    <i class="fas fa-microphone-alt"></i>
+                    <div>يحتاج هذا النظام إلى الوصول إلى الميكروفون. سيطلب المتصفح الإذن عند النقر على "بدء الاستماع".</div>
+                </div>
+                
+                <div class="controls">
+                    <button id="startBtn">
+                        <i class="fas fa-play-circle"></i>
+                        <span>بدء الاستماع</span>
+                    </button>
+                    <button id="stopBtn" disabled>
+                        <i class="fas fa-stop-circle"></i>
+                        <span>إيقاف الاستماع</span>
+                    </button>
+                    <button id="saveBtn" class="secondary">
+                        <i class="fas fa-save"></i>
+                        <span>حفظ الصورة</span>
+                    </button>
+                    <button id="clearBtn" class="secondary">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>مسح المعرض</span>
+                    </button>
+                </div>
+                
+                <div class="status" id="status">
+                    النظام غير نشط. اضغط على "بدء الاستماع" للبدء.
+                </div>
+                
+                <div class="volume-indicator">
+                    <div class="volume-level" id="volumeLevel"></div>
+                </div>
+            </div>
+            
+            <div class="panel">
+                <h2 class="panel-title"><i class="fas fa-palette"></i> المعاينة</h2>
+                
+                <div class="visualizers">
+                    <div class="visualizer-container">
+                        <div class="visualizer-title">
+                            <i class="fas fa-chart-bar"></i>
+                            مخطط الترددات الصوتية
+                        </div>
+                        <canvas id="audioCanvas" width="600" height="200"></canvas>
+                    </div>
+                    
+                    <div class="visualizer-container">
+                        <div class="visualizer-title">
+                            <i class="fas fa-image"></i>
+                            الصورة المتولدة
+                        </div>
+                        <canvas id="imageCanvas" width="600" height="400"></canvas>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div class="buttons-grid">
-            <a href="https://ornmo-502.github.io/Electronic-Source-Ornmo/" class="btn" target="_blank">
-                <i class="fas fa-file-alt"></i>
-                <span>المرجع الإلكتروني العتبة الحسينية</span>
-            </a>
-            
-            <a href="https://ornmo-502.github.io/E-Warehouse/" class="btn" target="_blank">
-                <i class="fas fa-file-alt"></i>
-                <span>المستودع الإلكتروني مكتبة وارث الانبياء</span>
-            </a>
-            
-            <a href="https://t.me/Ornmo_law_502" class="btn" target="_blank">
-                <i class="fas fa-file-alt"></i>
-                <span>المصدر الإلكتروني مكتبة أورنمو مبع القانون</span>
-            </a>
-            
-            <a href="https://ornmo-502.github.io/ornmo-Lirary502/" class="btn" target="_blank">
-                <i class="fas fa-file-alt"></i>
-                <span> نماذج بحوث قانونية </span>
-            </a>
-            
-            <a href="https://ornmo-502.github.io/Electronic-Source-Ornmo/" class="btn" target="_blank">
-                <i class="fas fa-file-alt"></i>
-                <span>المصدر الإلكتروني الخامس</span>
-            </a>
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> كيفية الاستخدام</h3>
+            <ol>
+                <li>انقر على زر "بدء الاستماع" للسماح للنظام بالوصول إلى الميكروفون.</li>
+                <li>ابدأ بالتحدث أو تشغيل الموسيقى لرؤية الترددات الصوتية على المخطط.</li>
+                <li>ستتغير الصورة المتولدة تلقائياً بناءً على خصائص الصوت.</li>
+                <li>انقر على "حفظ الصورة" لإضافة الصورة الحالية إلى المعرض.</li>
+                <li>استخدم "مسح المعرض" لحذف جميع الصور المحفوظة.</li>
+            </ol>
         </div>
         
-        <div class="download-section">
-            <h2>تحميل تطبيق أورنمو</h2>
-            <p>احصل على التطبيق الكامل مع جميع الميزات</p>
-            <a href="https://z0z0502.github.io/download-/" class="download-btn" target="_blank">
-                <i class="fas fa-download"></i>
-                تحميل الآن
-            </a>
+        <div class="gallery-section">
+            <div class="gallery-header">
+                <h2 class="gallery-title">
+                    <i class="fas fa-photo-video"></i>
+                    معرض الصور المتولدة
+                </h2>
+                <div class="gallery-controls">
+                    <button id="exportBtn" class="secondary">
+                        <i class="fas fa-download"></i>
+                        <span>تصدير المعرض</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="gallery" id="gallery">
+                <div class="empty-gallery">
+                    <i class="fas fa-images"></i>
+                    <p>لا توجد صور محفوظة بعد. ابدأ بالاستماع للصوت واحفظ بعض الصور!</p>
+                </div>
+            </div>
         </div>
         
-        <div class="footer">
-            <p>جميع الحقوق محفوظة © أورنمو - منبع القانون 2022-2026</p>
-        </div>
+        <footer>
+            <p>تم تطويره باستخدام HTML5 وWeb Audio API وCanvas | نظام توليد الصور بالصوت &copy; 2023</p>
+        </footer>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // إضافة تأثيرات تفاعلية للأزرار
-            const buttons = document.querySelectorAll('.btn');
-            buttons.forEach(button => {
-                button.addEventListener('mouseenter', function() {
-                    this.style.transform = 'translateY(-5px)';
-                });
-                
-                button.addEventListener('mouseleave', function() {
-                    this.style.transform = 'translateY(0)';
-                });
-            });
+        // العناصر الرئيسية في الصفحة
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const status = document.getElementById('status');
+        const audioCanvas = document.getElementById('audioCanvas');
+        const imageCanvas = document.getElementById('imageCanvas');
+        const gallery = document.getElementById('gallery');
+        const volumeLevel = document.getElementById('volumeLevel');
+        
+        // سياق الرسم للعناصر Canvas
+        const audioCtx = audioCanvas.getContext('2d');
+        const imageCtx = imageCanvas.getContext('2d');
+        
+        // متغيرات النظام
+        let audioContext;
+        let analyser;
+        let microphone;
+        let javascriptNode;
+        let isListening = false;
+        let animationId;
+        let savedImages = [];
+        let audioData = new Uint8Array(0);
+        
+        // تهيئة النظام
+        function init() {
+            // تهيئة Canvas الصورة بخلفية
+            drawInitialImage();
             
-            // رسالة تأكيد عند النقر على زر التحميل
-            const downloadBtn = document.querySelector('.download-btn');
-            downloadBtn.addEventListener('click', function() {
-                // يمكنك إضافة أي رسالة تأكيد هنا إذا أردت
-                console.log('سيتم فتح صفحة التحميل...');
+            // تحميل الصور المحفوظة من localStorage
+            loadSavedImages();
+            
+            // إعداد مستمعي الأحداث
+            setupEventListeners();
+        }
+        
+        // رسم صورة أولية
+        function drawInitialImage() {
+            imageCtx.fillStyle = '#1a1a2e';
+            imageCtx.fillRect(0, 0, imageCanvas.width, imageCanvas.height);
+            
+            // إضافة نص ترحيبي
+            imageCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+            imageCtx.font = '24px Arial';
+            imageCtx.textAlign = 'center';
+            imageCtx.fillText('سيتم عرض الصور المتولدة هنا', imageCanvas.width/2, imageCanvas.height/2);
+            
+            imageCtx.font = '16px Arial';
+            imageCtx.fillText('ابدأ بالاستماع للصوت لرؤية الصور المتولدة', imageCanvas.width/2, imageCanvas.height/2 + 40);
+        }
+        
+        // إعداد مستمعي الأحداث
+        function setupEventListeners() {
+            startBtn.addEventListener('click', startListening);
+            stopBtn.addEventListener('click', stopListening);
+            saveBtn.addEventListener('click', saveImage);
+            clearBtn.addEventListener('click', clearGallery);
+            exportBtn.addEventListener('click', exportGallery);
+        }
+        
+        // بدء الاستماع للصوت
+        async function startListening() {
+            try {
+                status.textContent = 'جاري طلب إذن استخدام الميكروفون...';
+                status.classList.add('pulse');
+                
+                // طلب إذن استخدام الميكروفون
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                
+                // إنشاء سياق الصوت
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                microphone = audioContext.createMediaStreamSource(stream);
+                
+                // إعداد المحلل
+                analyser.fftSize = 256;
+                analyser.smoothingTimeConstant = 0.8;
+                microphone.connect(analyser);
+                
+                // إنشاء عقدة لمعالجة البيانات
+                javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
+                analyser.connect(javascriptNode);
+                javascriptNode.connect(audioContext.destination);
+                
+                // معالجة البيانات الصوتية
+                javascriptNode.onaudioprocess = () => {
+                    audioData = new Uint8Array(analyser.frequencyBinCount);
+                    analyser.getByteFrequencyData(audioData);
+                    
+                    // تحديث مؤشر مستوى الصوت
+                    const volume = Math.max(...audioData) / 255 * 100;
+                    volumeLevel.style.width = `${volume}%`;
+                };
+                
+                // تحديث حالة النظام
+                isListening = true;
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                status.textContent = 'النظام يستمع إلى الصوت... جرب التحدث أو تشغيل الموسيقى!';
+                status.classList.remove('pulse');
+                
+                // بدء رسم مخطط الترددات
+                drawAudioVisualizer();
+                
+            } catch (error) {
+                console.error('خطأ في الوصول إلى الميكروفون:', error);
+                status.textContent = 'فشل في الوصول إلى الميكروفون. يرجى التحقق من الإذن وتجربة مرة أخرى.';
+                status.classList.remove('pulse');
+            }
+        }
+        
+        // إيقاف الاستماع للصوت
+        function stopListening() {
+            if (javascriptNode) {
+                javascriptNode.disconnect();
+            }
+            if (microphone) {
+                microphone.disconnect();
+            }
+            if (audioContext) {
+                audioContext.close();
+            }
+            
+            isListening = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            status.textContent = 'تم إيقاف الاستماع.';
+            volumeLevel.style.width = '0%';
+            
+            // إيقاف الرسم المتحرك
+            cancelAnimationFrame(animationId);
+            
+            // مسح مخطط الترددات
+            audioCtx.clearRect(0, 0, audioCanvas.width, audioCanvas.height);
+            
+            // إعادة تعيين الصورة
+            drawInitialImage();
+        }
+        
+        // رسم مخطط الترددات الصوتية
+        function drawAudioVisualizer() {
+            if (!isListening) return;
+            
+            // مسح Canvas
+            audioCtx.clearRect(0, 0, audioCanvas.width, audioCanvas.height);
+            
+            // رسم مخطط الترددات
+            const bufferLength = audioData.length;
+            const barWidth = (audioCanvas.width / bufferLength) * 2.5;
+            let barHeight;
+            let x = 0;
+            
+            for (let i = 0; i < bufferLength; i++) {
+                barHeight = audioData[i] / 2;
+                
+                // استخدام تدرج لوني بناءً على شدة التردد
+                const gradient = audioCtx.createLinearGradient(0, 0, 0, audioCanvas.height);
+                gradient.addColorStop(0, '#8e2de2');
+                gradient.addColorStop(0.5, '#4a00e0');
+                gradient.addColorStop(1, '#1a2a6c');
+                
+                audioCtx.fillStyle = gradient;
+                audioCtx.fillRect(x, audioCanvas.height - barHeight, barWidth, barHeight);
+                
+                x += barWidth + 1;
+            }
+            
+            // توليد الصورة بناءً على بيانات الصوت
+            generateImage(audioData);
+            
+            // الاستمرار في الرسم
+            animationId = requestAnimationFrame(drawAudioVisualizer);
+        }
+        
+        // توليد الصورة بناءً على بيانات الصوت
+        function generateImage(frequencyData) {
+            // مسح Canvas الصورة
+            imageCtx.fillStyle = '#1a1a2e';
+            imageCtx.fillRect(0, 0, imageCanvas.width, imageCanvas.height);
+            
+            // حساب متوسط الترددات
+            const avgFrequency = frequencyData.reduce((a, b) => a + b, 0) / frequencyData.length;
+            
+            // استخدام بيانات التردد لتحديد خصائص الرسم
+            const shapesCount = Math.floor(avgFrequency / 10) + 5;
+            const maxSize = Math.min(imageCanvas.width, imageCanvas.height) / 4;
+            
+            // رسم أشكال مختلفة بناءً على الترددات
+            for (let i = 0; i < shapesCount; i++) {
+                const freqIndex = i % frequencyData.length;
+                const frequency = frequencyData[freqIndex];
+                
+                // تحديد موقع الشكل
+                const x = Math.random() * imageCanvas.width;
+                const y = Math.random() * imageCanvas.height;
+                
+                // تحديد حجم الشكل بناءً على التردد
+                const size = (frequency / 255) * maxSize;
+                
+                // تحديد اللون بناءً على التردد
+                const hue = (frequency / 255) * 360;
+                const saturation = 70 + (frequency / 255) * 30;
+                const lightness = 40 + (frequency / 255) * 30;
+                
+                imageCtx.fillStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                imageCtx.strokeStyle = `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+                imageCtx.lineWidth = 2;
+                
+                // اختيار نوع الشكل عشوائيًا
+                const shapeType = Math.floor(Math.random() * 4);
+                
+                switch (shapeType) {
+                    case 0: // دائرة
+                        imageCtx.beginPath();
+                        imageCtx.arc(x, y, size, 0, Math.PI * 2);
+                        imageCtx.fill();
+                        break;
+                        
+                    case 1: // مستطيل
+                        imageCtx.fillRect(x - size/2, y - size/2, size, size);
+                        break;
+                        
+                    case 2: // مثلث
+                        imageCtx.beginPath();
+                        imageCtx.moveTo(x, y - size);
+                        imageCtx.lineTo(x - size, y + size);
+                        imageCtx.lineTo(x + size, y + size);
+                        imageCtx.closePath();
+                        imageCtx.fill();
+                        break;
+                        
+                    case 3: // خطوط
+                        imageCtx.beginPath();
+                        for (let j = 0; j < 5; j++) {
+                            const angle = (j / 5) * Math.PI * 2;
+                            const endX = x + Math.cos(angle) * size;
+                            const endY = y + Math.sin(angle) * size;
+                            imageCtx.moveTo(x, y);
+                            imageCtx.lineTo(endX, endY);
+                        }
+                        imageCtx.stroke();
+                        break;
+                }
+            }
+            
+            // إضافة تأثيرات إضافية بناءً على شدة الصوت
+            if (avgFrequency > 150) {
+                // تأثير توهج عند شدة صوت عالية
+                imageCtx.globalCompositeOperation = 'lighter';
+                imageCtx.fillStyle = `rgba(255, 255, 255, ${avgFrequency / 500})`;
+                imageCtx.fillRect(0, 0, imageCanvas.width, imageCanvas.height);
+                imageCtx.globalCompositeOperation = 'source-over';
+            }
+        }
+        
+        // حفظ الصورة الحالية
+        function saveImage() {
+            if (!isListening) {
+                status.textContent = 'يجب بدء الاستماع أولاً لحفظ الصورة!';
+                return;
+            }
+            
+            // إنشاء عنصر canvas جديد للصورة المصغرة
+            const thumbnailCanvas = document.createElement('canvas');
+            const thumbnailCtx = thumbnailCanvas.getContext('2d');
+            thumbnailCanvas.width = 280;
+            thumbnailCanvas.height = 200;
+            
+            // نسخ الصورة الحالية إلى الصورة المصغرة
+            thumbnailCtx.drawImage(imageCanvas, 0, 0, thumbnailCanvas.width, thumbnailCanvas.height);
+            
+            // حفظ بيانات الصورة
+            const imageData = {
+                timestamp: new Date().toLocaleString('ar-SA'),
+                dataUrl: thumbnailCanvas.toDataURL(),
+                fullDataUrl: imageCanvas.toDataURL()
+            };
+            
+            savedImages.push(imageData);
+            
+            // حفظ في localStorage
+            localStorage.setItem('soundGeneratedImages', JSON.stringify(savedImages));
+            
+            // تحديث المعرض
+            updateGallery();
+            
+            // عرض رسالة تأكيد
+            status.textContent = `تم حفظ الصورة بنجاح! إجمالي الصور المحفوظة: ${savedImages.length}`;
+            setTimeout(() => {
+                if (isListening) {
+                    status.textContent = 'النظام يستمع إلى الصوت... جرب التحدث أو تشغيل الموسيقى!';
+                }
+            }, 3000);
+        }
+        
+        // تحديث معرض الصور
+        function updateGallery() {
+            if (savedImages.length === 0) {
+                gallery.innerHTML = `
+                    <div class="empty-gallery">
+                        <i class="fas fa-images"></i>
+                        <p>لا توجد صور محفوظة بعد. ابدأ بالاستماع للصوت واحفظ بعض الصور!</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            gallery.innerHTML = '';
+            
+            savedImages.forEach((image, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                
+                const canvas = document.createElement('canvas');
+                canvas.width = 280;
+                canvas.height = 200;
+                
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                };
+                img.src = image.dataUrl;
+                
+                const info = document.createElement('div');
+                info.className = 'gallery-info';
+                info.textContent = `صورة ${index + 1} - ${image.timestamp}`;
+                
+                galleryItem.appendChild(canvas);
+                galleryItem.appendChild(info);
+                gallery.appendChild(galleryItem);
             });
-        });
+        }
+        
+        // تحميل الصور المحفوظة من localStorage
+        function loadSavedImages() {
+            const saved = localStorage.getItem('soundGeneratedImages');
+            if (saved) {
+                savedImages = JSON.parse(saved);
+                updateGallery();
+            }
+        }
+        
+        // مسح جميع الصور المحفوظة
+        function clearGallery() {
+            if (savedImages.length === 0) {
+                status.textContent = 'لا توجد صور محفوظة للمسح!';
+                return;
+            }
+            
+            if (confirm('هل أنت متأكد من رغبتك في مسح جميع الصور المحفوظة؟ لا يمكن التراجع عن هذا الإجراء.')) {
+                savedImages = [];
+                localStorage.removeItem('soundGeneratedImages');
+                updateGallery();
+                status.textContent = 'تم مسح جميع الصور المحفوظة.';
+                setTimeout(() => {
+                    if (isListening) {
+                        status.textContent = 'النظام يستمع إلى الصوت... جرب التحدث أو تشغيل الموسيقى!';
+                    } else {
+                        status.textContent = 'النظام غير نشط. اضغط على "بدء الاستماع" للبدء.';
+                    }
+                }, 3000);
+            }
+        }
+        
+        // تصدير المعرض كملف ZIP (وظيفة وهمية للعرض)
+        function exportGallery() {
+            if (savedImages.length === 0) {
+                status.textContent = 'لا توجد صور محفوظة للتصدير!';
+                return;
+            }
+            
+            status.textContent = 'جاري تجهيز الصور للتصدير...';
+            // في التطبيق الحقيقي، هنا سيتم استخدام مكتبة مثل JSZip لإنشاء ملف ZIP
+            setTimeout(() => {
+                status.textContent = `تم تصدير ${savedImages.length} صورة بنجاح (وظيفة تجريبية)`;
+            }, 1500);
+        }
+        
+        // تهيئة النظام عند تحميل الصفحة
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
